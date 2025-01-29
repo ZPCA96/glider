@@ -32,6 +32,22 @@ const (
 // MaxAddrLen is the maximum size of SOCKS address in bytes
 const MaxAddrLen = 1 + 1 + 255 + 2
 
+// SOCKS Replies as defined in RFC 1928 section 6
+
+const (
+	Success                 byte = 0x00 // X'00' succeeded
+	GeneralFailure          byte = 0x01 // X'01' general SOCKS server failure
+	ConnectionNotAllowed    byte = 0x02 // X'02' connection not allowed by ruleset
+	NetworkUnreachable      byte = 0x03 // X'03' Network unreachable
+	HostUnreachable         byte = 0x04 // X'04' Host unreachable
+	ConnectionRefused       byte = 0x05 // X'05' Connection refused
+	TTLExpired              byte = 0x06 // X'06' TTL expired
+	CommandNotSupported     byte = 0x07 // X'07' Command not supported
+	AddressTypeNotSupported byte = 0x08 // X'08' Address type not supported
+	Socks5UDPAssociate      byte = 0x09 // X'09' Custom reply for socks5UDPAssociate
+	UnassignedStart         byte = 0x10 // X'09' to X'FF' unassigned start
+)
+
 // Errors are socks5 errors
 var Errors = []error{
 	errors.New(""),
@@ -95,7 +111,7 @@ func ReadAddr(r io.Reader) (Addr, error) {
 		return b[:1+net.IPv6len+2], err
 	}
 
-	return nil, Errors[8]
+	return nil, Errors[AddressTypeNotSupported]
 }
 
 // SplitAddr slices a SOCKS address from beginning of b. Returns nil if failed.
