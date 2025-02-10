@@ -40,7 +40,7 @@ func NewFwdrGroup(rulePath string, s []string, c *Strategy) *FwdrGroup {
 	var fwdrs []*Forwarder
 	for _, chain := range s {
 		fwdr, err := ForwarderFromURL(chain, c.IntFace,
-			time.Duration(c.DialTimeout)*time.Second, time.Duration(c.RelayTimeout)*time.Second)
+			time.Duration(c.DialTimeout)*time.Second, time.Duration(c.RelayTimeout)*time.Millisecond)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -51,7 +51,7 @@ func NewFwdrGroup(rulePath string, s []string, c *Strategy) *FwdrGroup {
 	if len(fwdrs) == 0 {
 		// direct forwarder
 		direct, err := DirectForwarder(c.IntFace,
-			time.Duration(c.DialTimeout)*time.Second, time.Duration(c.RelayTimeout)*time.Second)
+			time.Duration(c.DialTimeout)*time.Second, time.Duration(c.RelayTimeout)*time.Millisecond)
 		if err != nil {
 			log.Fatal(err)
 		}
